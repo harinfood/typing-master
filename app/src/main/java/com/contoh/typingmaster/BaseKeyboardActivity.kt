@@ -37,6 +37,19 @@ abstract class BaseKeyboardActivity : Activity() {
         layarKeyboard?.sorot(c)
     }
 
+    /**
+     * Spasi dan Tab ditangani di sini (sebelum komponen tampilan dan perilaku bawaan Android),
+     * sehingga tidak memicu geser halaman, fokus, atau tombol Back. Kedua aksi (tekan dan lepas)
+     * dikonsumsi, hanya aksi tekan yang diproses.
+     */
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_SPACE || event.keyCode == KeyEvent.KEYCODE_TAB) {
+            if (event.action == KeyEvent.ACTION_DOWN) onKeyDown(event.keyCode, event)
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.repeatCount > 0 && keyCode != KeyEvent.KEYCODE_DEL) return true
         when (keyCode) {

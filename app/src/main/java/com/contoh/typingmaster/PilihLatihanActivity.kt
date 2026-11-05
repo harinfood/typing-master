@@ -22,6 +22,8 @@ class PilihLatihanActivity : Activity() {
 
         val scroll = ScrollView(this)
         scroll.isFillViewport = true
+        scroll.isFocusable = false
+        scroll.isFocusableInTouchMode = false
         val daftar = linear(this)
         daftar.setPadding(0, 0, 0, dp(16))
         for ((i, lv) in Data.LEVEL.withIndex()) {

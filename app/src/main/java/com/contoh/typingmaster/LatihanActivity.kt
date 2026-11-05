@@ -155,6 +155,8 @@ class LatihanActivity : BaseKeyboardActivity() {
         tampilanTeks.setLineSpacing(dp(8).toFloat(), 1f)
         val scroll = ScrollView(this)
         scroll.isFillViewport = true
+        scroll.isFocusable = false
+        scroll.isFocusableInTouchMode = false
         scroll.addView(tampilanTeks)
         kartuTeks.addView(scroll, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         root.addView(kartuTeks, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))

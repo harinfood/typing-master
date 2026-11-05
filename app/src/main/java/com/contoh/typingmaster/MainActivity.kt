@@ -48,6 +48,8 @@ class MainActivity : BaseKeyboardActivity() {
     private fun buatLayar(): View {
         val scroll = ScrollView(this)
         scroll.isFillViewport = true
+        scroll.isFocusable = false
+        scroll.isFocusableInTouchMode = false
         scroll.setBackgroundColor(Tema.latarAtas)
 
         val root = akarLatar()

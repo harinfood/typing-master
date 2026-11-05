@@ -128,6 +128,8 @@ class BebasActivity : BaseKeyboardActivity() {
         tampilan.setLineSpacing(dp(6).toFloat(), 1f)
         val scroll = ScrollView(this)
         scroll.isFillViewport = true
+        scroll.isFocusable = false
+        scroll.isFocusableInTouchMode = false
         scroll.addView(tampilan)
         kartu.addView(scroll, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         root.addView(kartu, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f).apply { setMargins(0, dp(8), 0, dp(6)) })

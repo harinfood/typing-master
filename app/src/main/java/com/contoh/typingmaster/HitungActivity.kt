@@ -22,6 +22,21 @@ class HitungActivity : BaseKeyboardActivity() {
         const val TOTAL_SOAL = 10
         val MODE_LABEL = listOf("🔢 Angka", "➕ Tambah", "➖ Kurang", "✖ Kali", "🎲 Campur")
         val LEVEL_LABEL = listOf("Angka 1–5", "Angka 1–10", "Angka 1–20")
+        private val SATUAN = arrayOf("nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas")
+
+        /** Mengubah angka menjadi kata Bahasa Indonesia, misalnya 12 -> "dua belas". */
+        fun kataAngka(n: Int): String = when {
+            n < 0 -> "min ${kataAngka(-n)}"
+            n < 12 -> SATUAN[n]
+            n < 20 -> "${kataAngka(n - 10)} belas"
+            n < 100 -> {
+                val sisa = n % 10
+                "${kataAngka(n / 10)} puluh" + if (sisa > 0) " ${kataAngka(sisa)}" else ""
+            }
+            n < 200 -> "seratus" + if (n % 100 > 0) " ${kataAngka(n - 100)}" else ""
+            n < 1000 -> "${kataAngka(n / 100)} ratus" + if (n % 100 > 0) " ${kataAngka(n % 100)}" else ""
+            else -> n.toString()
+        }
     }
 
     private lateinit var suara: Suara
@@ -348,21 +363,4 @@ class HitungActivity : BaseKeyboardActivity() {
         return t
     }
 
-    companion object Angka {
-        private val SATUAN = arrayOf("nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas")
-
-        /** Mengubah angka menjadi kata Bahasa Indonesia, misalnya 12 -> "dua belas". */
-        fun kataAngka(n: Int): String = when {
-            n < 0 -> "min ${kataAngka(-n)}"
-            n < 12 -> SATUAN[n]
-            n < 20 -> "${kataAngka(n - 10)} belas"
-            n < 100 -> {
-                val sisa = n % 10
-                "${kataAngka(n / 10)} puluh" + if (sisa > 0) " ${kataAngka(sisa)}" else ""
-            }
-            n < 200 -> "seratus" + if (n % 100 > 0) " ${kataAngka(n - 100)}" else ""
-            n < 1000 -> "${kataAngka(n / 100)} ratus" + if (n % 100 > 0) " ${kataAngka(n % 100)}" else ""
-            else -> n.toString()
-        }
-    }
 }

@@ -10,18 +10,35 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.MeasureSpec
 
 /**
  * Piano 26 tuts (C4 sampai C#6) dengan huruf A sampai Z dari kiri ke kanan.
- * Mendukung banyak jari (multi-touch) dan geser jari di atas tuts.
+ * Setiap tuts putih juga menampilkan nama solmisasi (Do, Re, Mi, ...) dan nama nadanya.
+ * Lebar tuts tetap agar mudah ditekan; piano digulir horizontal bila lebih lebar dari layar.
  */
 class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
 
     companion object {
+        const val LEBAR_TUTS_DP = 54
         val NAMA_NADA = arrayOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
+        val SOLMISASI = arrayOf("Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si")
+        private val WARNA_SOLMISASI = mapOf(
+            0 to "#FF5252", 2 to "#FF9100", 4 to "#FFEA00", 5 to "#76FF03",
+            7 to "#00E5FF", 9 to "#2979FF", 11 to "#D500F9"
+        )
         fun adalahHitam(s: Int): Boolean = (s % 12) in setOf(1, 3, 6, 8, 10)
         fun namaNada(s: Int): String = "${NAMA_NADA[s % 12]}${4 + s / 12}"
+        fun solmisasi(s: Int): String = SOLMISASI[s % 12]
+        fun warnaSolmisasi(s: Int): Int = Color.parseColor(WARNA_SOLMISASI[s % 12] ?: "#FFFFFF")
     }
+
+    /** Tuts yang harus ditekan berikutnya (disorot kuning). -1 = tidak ada. */
+    var targetKey: Int = -1
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     private val putih = ArrayList<Int>()
     private val hitam = ArrayList<Int>()
@@ -40,7 +57,16 @@ class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
         strokeWidth = context.dpF(1.5f)
         color = Color.parseColor("#9A93C4")
     }
+    private val pTarget = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = context.dpF(3.5f)
+        color = Color.parseColor("#FFEA00")
+    }
     private val pHuruf = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.DEFAULT_BOLD
+    }
+    private val pSolmisasi = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
         typeface = Typeface.DEFAULT_BOLD
     }
@@ -51,6 +77,18 @@ class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
 
     init {
         for (s in 0 until 26) if (adalahHitam(s)) hitam.add(s) else putih.add(s)
+    }
+
+    /** Lebar piano = jumlah tuts putih x lebar tuts tetap; tinggi mengikuti ruang yang diberikan layout. */
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val lebarDiminta = putih.size * context.dp(LEBAR_TUTS_DP)
+        val lebar = maxOf(MeasureSpec.getSize(widthMeasureSpec), lebarDiminta)
+        val tinggi = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) {
+            context.dp(220)
+        } else {
+            MeasureSpec.getSize(heightMeasureSpec)
+        }
+        setMeasuredDimension(lebar, tinggi)
     }
 
     override fun onSizeChanged(w: Int, h: Int, ow: Int, oh: Int) {
@@ -71,24 +109,42 @@ class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
         super.onDraw(c)
         val ww = width.toFloat() / putih.size
         val h = height.toFloat()
-        val radius = ww * 0.08f
+        val radius = ww * 0.1f
+        val inset = context.dpF(2.5f)
 
         for (s in putih) {
             val r = rectPutih[s] ?: continue
             c.drawRoundRect(r, radius, radius, if (s in kilat) pPutihTekan else pPutih)
             c.drawRoundRect(r, radius, radius, pGaris)
+            if (s == targetKey) {
+                val t = RectF(r.left + inset, r.top + inset, r.right - inset, r.bottom - inset)
+                c.drawRoundRect(t, radius, radius, pTarget)
+            }
+            // Huruf keyboard (besar)
             pHuruf.color = Color.parseColor("#14102A")
-            pHuruf.textSize = ww * 0.5f
-            c.drawText(('A' + s).toString(), r.centerX(), h * 0.8f, pHuruf)
-            pNada.textSize = ww * 0.22f
+            pHuruf.textSize = ww * 0.42f
+            c.drawText(('A' + s).toString(), r.centerX(), h * 0.66f, pHuruf)
+            // Solmisasi berwarna
+            pSolmisasi.color = warnaSolmisasi(s)
+            pSolmisasi.textSize = ww * 0.27f
+            c.drawText(solmisasi(s), r.centerX(), h * 0.8f, pSolmisasi)
+            // Nama nada kecil
+            pNada.textSize = ww * 0.2f
             c.drawText(namaNada(s), r.centerX(), h * 0.93f, pNada)
         }
         for (s in hitam) {
             val r = rectHitam[s] ?: continue
             c.drawRoundRect(r, radius, radius, if (s in kilat) pHitamTekan else pHitam)
+            if (s == targetKey) {
+                val t = RectF(r.left + inset, r.top + inset, r.right - inset, r.bottom - inset)
+                c.drawRoundRect(t, radius, radius, pTarget)
+            }
+            pSolmisasi.color = Color.WHITE
+            pSolmisasi.textSize = ww * 0.2f
+            c.drawText(solmisasi(s), r.centerX(), r.top + r.height() * 0.45f, pSolmisasi)
             pHuruf.color = Color.WHITE
             pHuruf.textSize = ww * 0.36f
-            c.drawText(('A' + s).toString(), r.centerX(), r.bottom - ww * 0.22f, pHuruf)
+            c.drawText(('A' + s).toString(), r.centerX(), r.bottom - ww * 0.2f, pHuruf)
         }
     }
 

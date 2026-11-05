@@ -29,6 +29,7 @@ class PianoActivity : BaseKeyboardActivity() {
     private lateinit var chipSuara: TextView
     private lateinit var chipUcap: TextView
     private lateinit var chipLatihan: TextView
+    private lateinit var navigasi: LinearLayout
     private val handler = Handler(Looper.getMainLooper())
     private val riwayat = ArrayDeque<Char>()
     private var suaraAktif = true
@@ -42,6 +43,7 @@ class PianoActivity : BaseKeyboardActivity() {
         suaraAktif = Pengaturan.pianoSuara(this)
         ucapAktif = Pengaturan.pianoUcap(this)
         setContentView(buatLayar())
+        onOrientasi(isLandscape())
         segarkanChip()
     }
 
@@ -102,7 +104,26 @@ class PianoActivity : BaseKeyboardActivity() {
         } else {
             txtTarget.text = "❌ Belum tepat. Cari: ${labelTarget()}"
             txtTarget.setTextColor(Tema.merah)
+            bicaraSalah()
         }
+    }
+
+    override fun onOrientasi(landscape: Boolean) {
+        super.onOrientasi(landscape)
+        piano.penuhLayar = landscape
+        piano.layoutParams = FrameLayout.LayoutParams(
+            if (landscape) FrameLayout.LayoutParams.MATCH_PARENT else FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.MATCH_PARENT
+        )
+        navigasi.visibility = if (landscape) View.GONE else View.VISIBLE
+        txtHuruf.textSize = if (landscape) 72f else 110f
+        piano.requestLayout()
+    }
+
+    /** Salah tekan saat latihan: diucapkan dengan nama peserta. */
+    private fun bicaraSalah() {
+        val n = Pengaturan.nama(this)
+        if (n.isNotEmpty()) suara.bicara("Salah tekan $n")
     }
 
     private fun pulsa() {
@@ -172,7 +193,7 @@ class PianoActivity : BaseKeyboardActivity() {
         root.addView(baris, lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, 0, 0, 0, dp(8)))
 
         // Navigasi geser piano
-        val navigasi = linear(this, false)
+        navigasi = linear(this, false)
         navigasi.gravity = Gravity.CENTER_VERTICAL
         val kiri = teks(this, "◀ Geser", 13f, Tema.teks, true)
         kiri.setPadding(dp(10), dp(6), dp(10), dp(6))

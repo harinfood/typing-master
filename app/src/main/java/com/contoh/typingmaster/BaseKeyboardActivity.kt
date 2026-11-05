@@ -1,6 +1,7 @@
 package com.contoh.typingmaster
 
 import android.app.Activity
+import android.content.res.Configuration
 import android.view.KeyEvent
 
 /**
@@ -35,6 +36,19 @@ abstract class BaseKeyboardActivity : Activity() {
 
     protected fun sorot(c: Char) {
         layarKeyboard?.sorot(c)
+    }
+
+    protected fun isLandscape(): Boolean =
+        resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    /** Dipanggil saat layar dibuat dan saat orientasi berubah. Turunan menyesuaikan tata letaknya. */
+    protected open fun onOrientasi(landscape: Boolean) {
+        layarKeyboard?.aturKompak(landscape)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        onOrientasi(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
     }
 
     /**

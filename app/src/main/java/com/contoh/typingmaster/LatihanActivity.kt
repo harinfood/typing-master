@@ -51,6 +51,7 @@ class LatihanActivity : BaseKeyboardActivity() {
         suara = Suara(this)
         target = Data.teksLatihan(level)
         setContentView(buatLayar())
+        onOrientasi(isLandscape())
         render()
     }
 
@@ -80,6 +81,8 @@ class LatihanActivity : BaseKeyboardActivity() {
             salah++
             kedipSalah()
             segarkanStat()
+            val n = Pengaturan.nama(this)
+            if (n.isNotEmpty()) suara.bicara("Salah tekan $n")
         }
     }
 

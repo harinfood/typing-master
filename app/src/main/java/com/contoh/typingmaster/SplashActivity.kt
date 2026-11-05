@@ -43,7 +43,7 @@ class SplashActivity : Activity() {
 
         val kolom = LinearLayout(this)
         kolom.orientation = LinearLayout.VERTICAL
-        kolom.gravity = Gravity.CENTER_HORIZONTAL
+        kolom.gravity = Gravity.CENTER
 
         val logo = ImageView(this)
         logo.setImageResource(R.drawable.logo_typing)

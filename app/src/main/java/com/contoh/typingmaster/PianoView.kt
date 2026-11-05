@@ -33,6 +33,9 @@ class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
         fun warnaSolmisasi(s: Int): Int = Color.parseColor(WARNA_SOLMISASI[s % 12] ?: "#FFFFFF")
     }
 
+    /** Landscape: seluruh tuts dibuat muat di layar tanpa gulir. */
+    var penuhLayar: Boolean = false
+
     /** Tuts yang harus ditekan berikutnya (disorot kuning). -1 = tidak ada. */
     var targetKey: Int = -1
         set(value) {
@@ -82,7 +85,8 @@ class PianoView(ctx: Context, private val onTekan: (Int) -> Unit) : View(ctx) {
     /** Lebar piano = jumlah tuts putih x lebar tuts tetap; tinggi mengikuti ruang yang diberikan layout. */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val lebarDiminta = putih.size * context.dp(LEBAR_TUTS_DP)
-        val lebar = maxOf(MeasureSpec.getSize(widthMeasureSpec), lebarDiminta)
+        val lebarSpec = MeasureSpec.getSize(widthMeasureSpec)
+        val lebar = if (penuhLayar && lebarSpec > 0) lebarSpec else maxOf(lebarSpec, lebarDiminta)
         val tinggi = if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.UNSPECIFIED) {
             context.dp(220)
         } else {

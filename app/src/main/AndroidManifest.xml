@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".NamaActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".MainActivity" android:exported="true" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".BebasActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".PilihLatihanActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />

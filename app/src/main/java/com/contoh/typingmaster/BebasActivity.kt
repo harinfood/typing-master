@@ -35,6 +35,7 @@ class BebasActivity : BaseKeyboardActivity() {
         suara = Suara(this)
         mode = Pengaturan.modeTts(this)
         setContentView(buatLayar())
+        onOrientasi(isLandscape())
         tampilkan()
         handler.post(kursor)
     }

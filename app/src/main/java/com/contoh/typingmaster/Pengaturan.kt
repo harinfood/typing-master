@@ -44,6 +44,12 @@ object Pengaturan {
         p(c).edit().putInt("bintang_game", totalBintangGame(c) + n).apply()
     }
 
+    fun nama(c: Context): String = p(c).getString("nama", "") ?: ""
+
+    fun simpanNama(c: Context, n: String) {
+        p(c).edit().putString("nama", n).apply()
+    }
+
     fun pianoSuara(c: Context): Boolean = p(c).getBoolean("piano_suara", true)
 
     fun simpanPianoSuara(c: Context, v: Boolean) {

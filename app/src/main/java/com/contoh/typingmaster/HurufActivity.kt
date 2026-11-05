@@ -42,6 +42,7 @@ class HurufActivity : BaseKeyboardActivity() {
         super.onCreate(savedInstanceState)
         suara = Suara(this)
         setContentView(buatLayar())
+        onOrientasi(isLandscape())
         mulaiSesi()
     }
 
@@ -153,6 +154,11 @@ class HurufActivity : BaseKeyboardActivity() {
                 .withEndAction { lapisEfek.removeView(v) }
                 .start()
         }
+    }
+
+    override fun onOrientasi(landscape: Boolean) {
+        super.onOrientasi(landscape)
+        besar.textSize = if (landscape) 96f else 150f
     }
 
     private fun aturChip() {

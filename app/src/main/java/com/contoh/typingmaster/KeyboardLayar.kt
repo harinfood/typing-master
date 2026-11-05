@@ -18,6 +18,8 @@ class KeyboardLayar(ctx: Context, private val onTekan: (String) -> Unit) : Linea
 
     private val tombol = HashMap<String, TextView>()
     private val handler = Handler(Looper.getMainLooper())
+    private val barisView = ArrayList<LinearLayout>()
+    private var tinggiBaris = 46
 
     init {
         orientation = VERTICAL
@@ -39,7 +41,8 @@ class KeyboardLayar(ctx: Context, private val onTekan: (String) -> Unit) : Linea
             p.setMargins(context.dp(3), context.dp(3), context.dp(3), context.dp(3))
             b.addView(t, p)
         }
-        addView(b, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, context.dp(46)))
+        barisView.add(b)
+        addView(b, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, context.dp(tinggiBaris)))
     }
 
     private fun buatTombol(label: String, token: String): TextView {
@@ -66,6 +69,17 @@ class KeyboardLayar(ctx: Context, private val onTekan: (String) -> Unit) : Linea
         val t = tombol[token] ?: return
         t.background = riak(context, Tema.sorot, 10)
         handler.postDelayed({ t.background = riak(context, Tema.tombol, 10) }, 220L)
+    }
+
+    /** Landscape: tuts lebih pendek agar seluruh keyboard tetap terlihat. */
+    fun aturKompak(landscape: Boolean) {
+        val tinggi = if (landscape) 34 else 46
+        if (tinggi == tinggiBaris) return
+        tinggiBaris = tinggi
+        for (b in barisView) {
+            b.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, context.dp(tinggi))
+        }
+        requestLayout()
     }
 
     /** Kilatan saat tombol ditekan (keyboard fisik maupun layar). */

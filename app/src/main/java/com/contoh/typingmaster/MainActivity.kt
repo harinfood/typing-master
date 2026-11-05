@@ -21,6 +21,7 @@ class MainActivity : BaseKeyboardActivity() {
     private lateinit var inputManager: InputManager
     private lateinit var chipKeyboard: LinearLayout
     private lateinit var txtKeyboard: TextView
+    private lateinit var txtHalo: TextView
 
     private val pendengarInput = object : InputManager.InputDeviceListener {
         override fun onInputDeviceAdded(deviceId: Int) = segarkanKeyboard()
@@ -38,6 +39,12 @@ class MainActivity : BaseKeyboardActivity() {
         super.onResume()
         inputManager.registerInputDeviceListener(pendengarInput, Handler(Looper.getMainLooper()))
         segarkanKeyboard()
+        val nama = Pengaturan.nama(this)
+        if (nama.isEmpty()) {
+            startActivity(Intent(this, NamaActivity::class.java))
+        } else {
+            txtHalo.text = "Halo, $nama!  ✏ ganti nama"
+        }
     }
 
     override fun onPause() {
@@ -127,6 +134,9 @@ class MainActivity : BaseKeyboardActivity() {
         judul.letterSpacing = 0.06f
         kolom.addView(judul)
         kolom.addView(teks(this, "Belajar mengetik by Harinfood", 13f, Tema.redup))
+        txtHalo = teks(this, "Halo!", 14f, Tema.hijau, true)
+        txtHalo.setOnClickListener { startActivity(Intent(this, NamaActivity::class.java)) }
+        kolom.addView(txtHalo)
         h.addView(kolom, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         return h
     }

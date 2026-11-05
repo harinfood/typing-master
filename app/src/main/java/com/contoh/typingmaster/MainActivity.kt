@@ -95,6 +95,12 @@ class MainActivity : BaseKeyboardActivity() {
         root.addView(baris2, lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, dp(4)))
 
         root.addView(
+            kartuMenu("Piano Huruf", "Tekan tuts piano: berbunyi nada dan tampil hurufnya", "🎹", Tema.merah, Tema.kuning) {
+                startActivity(Intent(this, PianoActivity::class.java))
+            },
+            lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, dp(4), dp(5), dp(5), 0)
+        )
+        root.addView(
             teks(this, "Colokkan keyboard lewat kabel OTG, lalu mulai mengetik.\nTidak punya keyboard? Gunakan keyboard di layar.", 13f, Tema.redup).apply {
                 gravity = android.view.Gravity.CENTER
                 setPadding(dp(8), dp(18), dp(8), dp(8))

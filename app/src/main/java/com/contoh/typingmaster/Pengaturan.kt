@@ -44,6 +44,18 @@ object Pengaturan {
         p(c).edit().putInt("bintang_game", totalBintangGame(c) + n).apply()
     }
 
+    fun pianoSuara(c: Context): Boolean = p(c).getBoolean("piano_suara", true)
+
+    fun simpanPianoSuara(c: Context, v: Boolean) {
+        p(c).edit().putBoolean("piano_suara", v).apply()
+    }
+
+    fun pianoUcap(c: Context): Boolean = p(c).getBoolean("piano_ucap", false)
+
+    fun simpanPianoUcap(c: Context, v: Boolean) {
+        p(c).edit().putBoolean("piano_ucap", v).apply()
+    }
+
     /** Nomor kelompok 10 huruf berikutnya untuk mode urut A-Z. */
     fun batchHuruf(c: Context): Int = p(c).getInt("batch_huruf", 0)
 

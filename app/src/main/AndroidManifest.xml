@@ -26,6 +26,7 @@
         <activity android:name=".BebasActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".PilihLatihanActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".LatihanActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
+        <activity android:name=".PianoActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
         <activity android:name=".HurufActivity" android:exported="false" android:windowSoftInputMode="stateAlwaysHidden" android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard" />
     </application>
 </manifest>

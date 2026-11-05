@@ -50,6 +50,12 @@ object Pengaturan {
         p(c).edit().putString("nama", n).apply()
     }
 
+    fun hitungBest(c: Context, mode: Int): Int = p(c).getInt("hitung_best_$mode", 0)
+
+    fun simpanHitungBest(c: Context, mode: Int, skor: Int) {
+        if (skor > hitungBest(c, mode)) p(c).edit().putInt("hitung_best_$mode", skor).apply()
+    }
+
     fun pianoSuara(c: Context): Boolean = p(c).getBoolean("piano_suara", true)
 
     fun simpanPianoSuara(c: Context, v: Boolean) {

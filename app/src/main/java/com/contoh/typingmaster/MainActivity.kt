@@ -108,6 +108,12 @@ class MainActivity : BaseKeyboardActivity() {
             lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, dp(4), dp(5), dp(5), 0)
         )
         root.addView(
+            kartuMenu("Angka & Matematika", "Belajar angka dan latihan hitung dengan suara", "🔢", Tema.hijau, Tema.biru) {
+                startActivity(Intent(this, HitungActivity::class.java))
+            },
+            lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, dp(4), dp(5), dp(5), 0)
+        )
+        root.addView(
             teks(this, "Colokkan keyboard lewat kabel OTG, lalu mulai mengetik.\nTidak punya keyboard? Gunakan keyboard di layar.", 13f, Tema.redup).apply {
                 gravity = android.view.Gravity.CENTER
                 setPadding(dp(8), dp(18), dp(8), dp(8))
@@ -182,6 +188,7 @@ class MainActivity : BaseKeyboardActivity() {
         for ((i, lv) in Data.LEVEL.withIndex()) {
             sb.append("${lv.nama}: ${Pengaturan.bestWpm(this, i)} kpm  ${bintangTeks(Pengaturan.bestBintang(this, i))}\n")
         }
+        sb.append("Angka tambah terbaik: ${Pengaturan.hitungBest(this, 1)}/10   Kurang: ${Pengaturan.hitungBest(this, 2)}/10   Kali: ${Pengaturan.hitungBest(this, 3)}/10\n")
         sb.append("\nHuruf dikenal: ${Pengaturan.hurufDikenal(this).length}/26\n")
         sb.append("Bintang game huruf: ${Pengaturan.totalBintangGame(this)}\n")
         sb.append("Total huruf diketik: ${Pengaturan.totalHuruf(this)}")

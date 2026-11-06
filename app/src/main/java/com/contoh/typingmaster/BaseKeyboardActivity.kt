@@ -57,11 +57,25 @@ abstract class BaseKeyboardActivity : Activity() {
      * dikonsumsi, hanya aksi tekan yang diproses.
      */
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_SPACE || event.keyCode == KeyEvent.KEYCODE_TAB) {
-            if (event.action == KeyEvent.ACTION_DOWN) onKeyDown(event.keyCode, event)
-            return true
+        when (event.keyCode) {
+            KeyEvent.KEYCODE_SPACE, KeyEvent.KEYCODE_TAB,
+            KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                // Enter tidak pernah diteruskan ke sistem, jadi tidak memicu tombol Back
+                if (event.action == KeyEvent.ACTION_DOWN) onKeyDown(event.keyCode, event)
+                return true
+            }
+            KeyEvent.KEYCODE_ESCAPE -> {
+                // Esc adalah tombol fisik untuk kembali
+                if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) onEsc()
+                return true
+            }
         }
         return super.dispatchKeyEvent(event)
+    }
+
+    /** Tombol Esc: kembali ke layar sebelumnya. */
+    protected open fun onEsc() {
+        onBackPressed()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {

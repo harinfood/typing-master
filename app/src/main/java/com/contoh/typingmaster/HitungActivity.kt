@@ -325,6 +325,10 @@ class HitungActivity : BaseKeyboardActivity() {
         pasangKeyboardLayar(kb)
         root.addView(kb, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT))
 
+        val petunjuk = teks(this, "Enter = periksa jawaban  ·  Esc = kembali", 12f, Tema.redup)
+        petunjuk.gravity = Gravity.CENTER
+        root.addView(petunjuk, lp(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 0f, 0, 0, 0, dp(4)))
+
         // Layar hasil akhir sesi
         lapisHasil = FrameLayout(this)
         lapisHasil.setBackgroundColor(Color.parseColor("#E00F0C1D"))
